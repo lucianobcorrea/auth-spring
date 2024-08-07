@@ -1,0 +1,14 @@
+CREATE TABLE users (
+   id BIGINT PRIMARY KEY NOT NULL,
+   username TEXT NOT NULL,
+   email TEXT NOT NULL UNIQUE,
+   password TEXT NOT NULL,
+   active BOOLEAN NOT NULL
+);
+
+CREATE TABLE roles (
+   id BIGINT PRIMARY KEY NOT NULL,
+   role TEXT NOT NULL UNIQUE,
+   user_id BIGINT NOT NULL,
+   CONSTRAINT fk_user_role FOREIGN KEY(user_id) REFERENCES users
+);
