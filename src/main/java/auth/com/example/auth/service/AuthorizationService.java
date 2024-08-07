@@ -1,7 +1,11 @@
 package auth.com.example.auth.service;
 
+import auth.com.example.auth.controller.request.authentication.AuthRequest;
 import auth.com.example.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,9 +17,19 @@ public class AuthorizationService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username);
+    }
+
+    public ResponseEntity<Void> login(AuthRequest data) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.getEmail(), data.getPassword());
+        var auth = authenticationManager.authenticate(usernamePassword);
+
+        return ResponseEntity.ok().build();
     }
 }
 
