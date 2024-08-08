@@ -17,19 +17,9 @@ public class AuthorizationService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username);
-    }
-
-    public ResponseEntity<Void> login(AuthRequest data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.getEmail(), data.getPassword());
-        var auth = authenticationManager.authenticate(usernamePassword);
-
-        return ResponseEntity.ok().build();
     }
 }
 
