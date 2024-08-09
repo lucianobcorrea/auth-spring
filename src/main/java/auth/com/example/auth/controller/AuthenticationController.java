@@ -1,8 +1,11 @@
 package auth.com.example.auth.controller;
 
-import auth.com.example.auth.controller.request.authentication.AuthRequest;
+import auth.com.example.auth.controller.request.authentication.LoginRequest;
 import auth.com.example.auth.controller.request.user.UserRequest;
-import auth.com.example.auth.service.AuthorizationService;
+import auth.com.example.auth.controller.response.authentication.LoginResponse;
+import auth.com.example.auth.domain.user.User;
+import auth.com.example.auth.mapper.LoginMapper;
+import auth.com.example.auth.security.TokenService;
 import auth.com.example.auth.service.CreateUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +20,23 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     @Autowired
-    private AuthorizationService authorizationService;
-
-    @Autowired
     private CreateUserService createUserService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> login(@RequestBody @Valid AuthRequest data) {
+    public LoginResponse login(@RequestBody @Valid LoginRequest data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.getEmail(), data.getPassword());
         var auth = authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return LoginMapper.toResponse(token);
     }
 
     @PostMapping("/register")

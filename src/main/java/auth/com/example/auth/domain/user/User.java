@@ -27,9 +27,10 @@ public class User implements UserDetails {
     private String email;
     private boolean active;
 
-    @OneToMany(mappedBy = "user")
-    private List<Role> roles = new ArrayList<>();
+    //Carregamento eager faz com que as roles sejam carregadas junto com a entity User
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Role> roles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
