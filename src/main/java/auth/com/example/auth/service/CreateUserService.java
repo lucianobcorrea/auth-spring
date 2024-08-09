@@ -1,8 +1,11 @@
 package auth.com.example.auth.service;
 
 import auth.com.example.auth.controller.request.user.UserRequest;
+import auth.com.example.auth.domain.role.Role;
 import auth.com.example.auth.domain.user.User;
+import auth.com.example.auth.domain.user.UserRole;
 import auth.com.example.auth.mapper.UserMapper;
+import auth.com.example.auth.repository.RoleRepository;
 import auth.com.example.auth.repository.UserRepository;
 import auth.com.example.auth.validator.UniqueEmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,9 @@ public class CreateUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     public ResponseEntity<Void> create(UserRequest data) {
 
         emailValidator.validate(data.getEmail());
@@ -29,6 +35,10 @@ public class CreateUserService {
         User user = UserMapper.toEntity(data);
         user.setPassword(passwordEncoder.encode(data.getPassword()));
         user.setActive(true);
+
+        Role role = roleRepository.findByRole(UserRole.USER);
+
+        user.setRole(role);
 
         userRepository.save(user);
 

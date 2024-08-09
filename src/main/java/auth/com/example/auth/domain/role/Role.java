@@ -5,6 +5,9 @@ import auth.com.example.auth.domain.user.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -19,7 +22,6 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToMany(mappedBy = "role")
+    private List<User> users = new ArrayList<>();
 }

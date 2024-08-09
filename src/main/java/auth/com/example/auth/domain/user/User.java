@@ -8,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,18 +26,14 @@ public class User implements UserDetails {
     private String email;
     private boolean active;
 
-    //Carregamento eager faz com que as roles sejam carregadas junto com a entity User
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Role> roles = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        boolean isAdmin = roles.stream()
-                .anyMatch(role -> role.getRole() == UserRole.ADMIN);
-
-        if(isAdmin) {
+        if(role.getRole() == UserRole.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         }else {
             return List.of(new SimpleGrantedAuthority("ROLE_USER"));
