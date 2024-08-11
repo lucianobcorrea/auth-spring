@@ -19,7 +19,7 @@ const schema = z.object({
 });
 
 export function LoginScreen() {
-  const { setAuthUser, setIsLoggedIn } = useAuthContext();
+  const { setIsLoggedIn } = useAuthContext();
 
   const {
     register,
@@ -40,8 +40,6 @@ export function LoginScreen() {
       localStorage.setItem('token', token);
 
       setIsLoggedIn(true);
-      setAuthUser(data.email);
-
       toast.success('Welcome');
     } catch (error) {
       toast.error('Incorrect email or password, please, try again.');
