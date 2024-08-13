@@ -8,6 +8,7 @@ import auth.com.example.auth.mapper.UserMapper;
 import auth.com.example.auth.repository.RoleRepository;
 import auth.com.example.auth.repository.UserRepository;
 import auth.com.example.auth.validator.UniqueEmailValidator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,7 @@ public class CreateUserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Transactional
     public ResponseEntity<Void> create(UserRequest data) {
 
         emailValidator.validate(data.getEmail());

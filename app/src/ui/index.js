@@ -1,3 +1,4 @@
 export { LoginScreen } from './screen/Login/login.screen';
-export { Input } from './screen/components/Input/input.component';
-export { Button } from './screen/components/Button/button.component';
+export { RegisterScreen } from './screen/Register/register.screen';
+export { Input } from './components/Input/input.component';
+export { Button } from './components/Button/button.component';
