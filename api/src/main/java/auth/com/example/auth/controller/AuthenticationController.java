@@ -1,6 +1,7 @@
 package auth.com.example.auth.controller;
 
 import auth.com.example.auth.controller.request.authentication.LoginRequest;
+import auth.com.example.auth.controller.request.authentication.TokenRequest;
 import auth.com.example.auth.controller.request.user.UserRequest;
 import auth.com.example.auth.controller.response.authentication.LoginResponse;
 import auth.com.example.auth.domain.user.User;
@@ -43,5 +44,11 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> register(@RequestBody @Valid UserRequest data) {
         return createUserService.create(data);
+    }
+
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(@RequestBody @Valid TokenRequest request) {
+        tokenService.invalidateToken(request);
     }
 }
